@@ -19,4 +19,6 @@ def api_root(request):
 def balance(request):
     hash_value = hash(request.GET.get("type") + request.get_host() + request.GET.get("uri"))
     server_id = hash_value % Server.objects.all().__len__()
-    return Response({"message": Server.objects.all()[server_id].server_ip})
+    return Response(
+        {"server_ip": Server.objects.all()[server_id].server_ip,
+         "server_state": Server.objects.all()[server_id].state})
