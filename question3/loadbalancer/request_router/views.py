@@ -3,18 +3,13 @@ from rest_framework.response import Response
 # for function based views
 from rest_framework.decorators import api_view
 
-
 # for apiroot reverse
 from rest_framework.reverse import reverse
+from request_router.models import Server
 
 
 @api_view()
 def api_root(request):
-    """
-    The root of all APIs, serves as a basic presentation of the APIs aviliable,
-    however needs manual additions of the functions.
-    reverse() serves as a url call to each function views.
-    """
     return Response({
         'balance': reverse('balance', request=request),
     })
@@ -22,4 +17,6 @@ def api_root(request):
 
 @api_view()
 def balance(request):
-    return Response({"message": "url"})
+    hash_value = hash(request.GET.get("type") + request.get_host() + request.GET.get("uri"))
+    server_id = hash_value % Server.objects.all().__len__()
+    return Response({"message": Server.objects.all()[server_id].server_ip})
