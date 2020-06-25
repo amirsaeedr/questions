@@ -8,6 +8,7 @@ import java.time.format.DateTimeFormatter
 
 @Service
 class TimeLimitedLinkService : LinkService<List<String>> {
+    //TODO (Add timeZone)
     override fun validate(hash: String, limitation: List<String>): Boolean {
         val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH:mm:ss")
         val currentDate: LocalDateTime? = LocalDateTime.now()
