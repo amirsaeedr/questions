@@ -1,6 +1,7 @@
 package ans.amir.service.link
 
-import ans.amir.entity.CountLimitedLink
+import org.springframework.stereotype.Service
+
 
 
 interface LinkService<T> {
