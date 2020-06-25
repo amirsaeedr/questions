@@ -1,4 +1,4 @@
-package ans.amir.service
+package ans.amir.service.link
 
 import ans.amir.entity.CountLimitedLink
 

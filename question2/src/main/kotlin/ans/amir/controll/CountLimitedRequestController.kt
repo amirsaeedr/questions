@@ -1,6 +1,7 @@
 package ans.amir.controll
 
-import ans.amir.service.LinkService
+import ans.amir.service.hash.HashService
+import ans.amir.service.link.LinkService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PathVariable
@@ -12,18 +13,22 @@ import org.springframework.web.server.ResponseStatusException
 
 @RestController
 @RequestMapping(path = ["/request/count"])
-class CountLimitedRequestController(private val service: LinkService) {
+class CountLimitedRequestController(private val linkService: LinkService<Long>, private val hashService: HashService) {
 
-    val salt: Int = 100
     @PostMapping(path = ["{hash}/{count}"])
     fun useLink(@PathVariable hash: String, @PathVariable count: String): ResponseEntity<String> {
-        if (hash != ("request/count/$count$salt").hashCode().toString()){
+        val parts: List<String> = listOf("request/count/", count)
+        if (hash == hashService.toHash(parts)) {
             throw ResponseStatusException(HttpStatus.BAD_REQUEST, "link is broken")
         }
-
-        if(service.validate(hash,count.toLong())){
-            return ResponseEntity.ok("it's valid")
+        try {
+            if (linkService.validate(hash, count.toLong())) {
+                return ResponseEntity.ok("it's valid")
+            }
+        } catch (e: NoSuchElementException) {
+            throw ResponseStatusException(HttpStatus.NOT_FOUND, "link does not exists")
         }
         throw ResponseStatusException(HttpStatus.FORBIDDEN, "permission denied")
     }
+
 }
