@@ -5,4 +5,5 @@ import org.springframework.data.repository.CrudRepository
 
 interface CountLimitedLinkRepository: CrudRepository<CountLimitedLink,Long> {
     fun findByLinkHash(linkHash: String): CountLimitedLink?
+    fun existsByLinkHash(linkHash: String): Boolean
 }

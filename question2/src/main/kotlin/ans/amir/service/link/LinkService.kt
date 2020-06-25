@@ -5,5 +5,5 @@ import ans.amir.entity.CountLimitedLink
 
 interface LinkService<T> {
     fun validate(hash: String, limitation: T): Boolean
-    fun addLink(hash: String): CountLimitedLink
+    fun addLink(hash: String): Boolean
 }

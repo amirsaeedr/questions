@@ -4,10 +4,7 @@ import ans.amir.service.hash.HashService
 import ans.amir.service.link.LinkService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 import org.springframework.web.server.ResponseStatusException
 
 
@@ -15,10 +12,10 @@ import org.springframework.web.server.ResponseStatusException
 @RequestMapping(path = ["/request/count"])
 class CountLimitedRequestController(private val linkService: LinkService<Long>, private val hashService: HashService) {
 
-    @PostMapping(path = ["{hash}/{count}"])
+    @GetMapping(path = ["{hash}/{count}"])
     fun useLink(@PathVariable hash: String, @PathVariable count: String): ResponseEntity<String> {
         val parts: List<String> = listOf("request/count/", count)
-        if (hash == hashService.toHash(parts)) {
+        if (hash != hashService.toHash(parts)) {
             throw ResponseStatusException(HttpStatus.BAD_REQUEST, "link is broken")
         }
         try {

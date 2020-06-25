@@ -17,5 +17,12 @@ class CountLimitedLinkService(private val repository: CountLimitedLinkRepository
         return false
     }
 
-    override fun addLink(hash: String) = repository.save(CountLimitedLink(hash, 0))
+
+    override fun addLink(hash: String): Boolean {
+        if (!repository.existsByLinkHash(hash)) {
+            repository.save(CountLimitedLink(hash, 0))
+            return true
+        }
+        return false
+    }
 }
