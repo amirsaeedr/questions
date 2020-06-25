@@ -15,7 +15,12 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
+from loadbalancer import views
+
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+    url(r'^$', views.api_root, name='api_root'),
+    # functions
+    url(r'^balance/?$', views.balance, name='balance'),
 ]
